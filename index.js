@@ -5,6 +5,8 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes');
+const mongoose = require('mongoose');
+const connUri = process.env.MONGO_LOCAL_CONN_URL;
 
 const app = express();
 const router = express.Router();
@@ -22,8 +24,19 @@ if (environment !== 'production') {
 
 app.use('/api', routes(router));
 
-app.listen(`${stage.port}`, () => {
-    console.log(`Server now listening at localhost:${stage.port}`);
-});
+mongoose.connect(connUri, { useNewUrlParser: true }, err => {
+    if (err) {
+        console.log(`Error connecting to database.`);
+    } else {
+        // app.locals.db = mongoose.connection;
+        app.listen(`${stage.port}`, () => {
+            console.log(`Server now listening at localhost:${stage.port}`);
+        })
+    }
+})
+
+// app.listen(`${stage.port}`, () => {
+//     console.log(`Server now listening at localhost:${stage.port}`);
+// });
 
 module.exports = app;
