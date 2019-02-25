@@ -28,7 +28,7 @@ mongoose.connect(connUri, { useNewUrlParser: true }, err => {
     if (err) {
         console.log(`Error connecting to database.`);
     } else {
-        // app.locals.db = mongoose.connection;
+        // Once the connection to the database has been established, start listening to incoming requests.
         app.listen(`${stage.port}`, () => {
             console.log(`Server now listening at localhost:${stage.port}`);
         })
